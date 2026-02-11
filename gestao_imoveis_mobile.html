@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Gestão de Imóveis Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .app-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .app-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            background: white;
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            min-width: 80px;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card h2 {
+            font-size: 18px;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #f06292 0%, #e91e63 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+            color: white;
+        }
+        
+        .list-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .list-item h3 {
+            font-size: 16px;
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+        
+        .list-item p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .recibo-preview {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .recibo-header {
+            text-align: center;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .recibo-header h2 {
+            color: #1e3c72;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .recibo-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .recibo-row:last-child {
+            border-bottom: none;
+        }
+        
+        .recibo-total {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .recibo-total h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .recibo-total .valor {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px;
+            color: #999;
+            font-size: 11px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .nav-item.active {
+            color: #667eea;
+        }
+        
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 3px;
+        }
+        
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 90;
+            transition: transform 0.3s;
+        }
+        
+        .fab:active {
+            transform: scale(0.95);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+            color: #1e3c72;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 2000;
+            animation: toastIn 0.3s;
+        }
+        
+        .toast.active {
+            display: block;
+        }
+        
+        @keyframes toastIn {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        
+        .install-prompt {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .install-prompt.show {
+            display: block;
+        }
+        
+        .install-prompt h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .install-prompt p {
+            font-size: 13px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <h1>🏠 Gestão de Imóveis</h1>
+        <p>Sistema Mobile</p>
+    </div>
+    
+    <div class="container">
+        <div class="install-prompt" id="installPrompt">
+            <h3>📲 Instalar App</h3>
+            <p>Adicione este app à sua tela inicial para acesso rápido!</p>
+            <button class="btn btn-primary" onclick="hideInstallPrompt()">Entendi!</button>
+        </div>
+        
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="value" id="totalImoveis">0</div>
+                <div class="label">Imóveis</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="totalInquilinos">0</div>
+                <div class="label">Inquilinos</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="totalContratos">0</div>
+                <div class="label">Contratos</div>
+            </div>
+            <div class="stat-card">
+                <div class="value" id="totalReceber">R$ 0</div>
+                <div class="label">A Receber</div>
+            </div>
+        </div>
+        
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="showTab('imoveis')">🏠 Imóveis</button>
+            <button class="tab-btn" onclick="showTab('inquilinos')">👤 Inquilinos</button>
+            <button class="tab-btn" onclick="showTab('contratos')">📄 Contratos</button>
+            <button class="tab-btn" onclick="showTab('pagamentos')">💰 Pagamentos</button>
+            <button class="tab-btn" onclick="showTab('recibos')">🧾 Recibos</button>
+        </div>
+        
+        <!-- ABA IMÓVEIS -->
+        <div id="imoveis" class="tab-content active">
+            <div class="card">
+                <h2>🏠 Meus Imóveis</h2>
+                <div id="listaImoveis"></div>
+            </div>
+        </div>
+        
+        <!-- ABA INQUILINOS -->
+        <div id="inquilinos" class="tab-content">
+            <div class="card">
+                <h2>👤 Meus Inquilinos</h2>
+                <div id="listaInquilinos"></div>
+            </div>
+        </div>
+        
+        <!-- ABA CONTRATOS -->
+        <div id="contratos" class="tab-content">
+            <div class="card">
+                <h2>📄 Contratos Ativos</h2>
+                <div id="listaContratos"></div>
+            </div>
+        </div>
+        
+        <!-- ABA PAGAMENTOS -->
+        <div id="pagamentos" class="tab-content">
+            <div class="card">
+                <h2>💰 Pagamentos</h2>
+                <div id="listaPagamentos"></div>
+            </div>
+        </div>
+        
+        <!-- ABA RECIBOS -->
+        <div id="recibos" class="tab-content">
+            <div class="card">
+                <h2>🧾 Gerar Recibo</h2>
+                <div class="form-group">
+                    <label>Selecione o Pagamento:</label>
+                    <select id="selectPagamentoRecibo" class="form-control">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                </div>
+                <button class="btn btn-success" onclick="gerarRecibo()">🌐 Gerar Recibo Online</button>
+                <div id="reciboPreview"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FAB Button -->
+    <button class="fab" onclick="openAddModal()">+</button>
+    
+    <!-- Modal Adicionar -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Adicionar</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showTab('imoveis')">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+            Imóveis
+        </div>
+        <div class="nav-item" onclick="showTab('inquilinos')">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+            Inquilinos
+        </div>
+        <div class="nav-item" onclick="showTab('contratos')">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>
+            Contratos
+        </div>
+        <div class="nav-item" onclick="showTab('pagamentos')">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg>
+            Pagamentos
+        </div>
+        <div class="nav-item" onclick="showTab('recibos')">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd"/></svg>
+            Recibos
+        </div>
+    </div>
+    
+    <script>
+        // Banco de dados LocalStorage
+        class Database {
+            constructor() {
+                this.imoveis = JSON.parse(localStorage.getItem('imoveis') || '[]');
+                this.inquilinos = JSON.parse(localStorage.getItem('inquilinos') || '[]');
+                this.contratos = JSON.parse(localStorage.getItem('contratos') || '[]');
+                this.pagamentos = JSON.parse(localStorage.getItem('pagamentos') || '[]');
+            }
+            
+            save() {
+                localStorage.setItem('imoveis', JSON.stringify(this.imoveis));
+                localStorage.setItem('inquilinos', JSON.stringify(this.inquilinos));
+                localStorage.setItem('contratos', JSON.stringify(this.contratos));
+                localStorage.setItem('pagamentos', JSON.stringify(this.pagamentos));
+            }
+            
+            addImovel(imovel) {
+                imovel.id = Date.now();
+                this.imoveis.push(imovel);
+                this.save();
+                return imovel;
+            }
+            
+            addInquilino(inquilino) {
+                inquilino.id = Date.now();
+                this.inquilinos.push(inquilino);
+                this.save();
+                return inquilino;
+            }
+            
+            addContrato(contrato) {
+                contrato.id = Date.now();
+                this.contratos.push(contrato);
+                this.save();
+                return contrato;
+            }
+            
+            addPagamento(pagamento) {
+                pagamento.id = Date.now();
+                this.pagamentos.push(pagamento);
+                this.save();
+                return pagamento;
+            }
+        }
+        
+        const db = new Database();
+        let currentTab = 'imoveis';
+        
+        // Funções de navegação
+        function showTab(tabName) {
+            currentTab = tabName;
+            
+            // Atualizar abas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            
+            // Atualizar botões
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Atualizar navegação inferior
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Atualizar conteúdo
+            loadContent();
+        }
+        
+        // Carregar conteúdo
+        function loadContent() {
+            switch(currentTab) {
+                case 'imoveis':
+                    loadImoveis();
+                    break;
+                case 'inquilinos':
+                    loadInquilinos();
+                    break;
+                case 'contratos':
+                    loadContratos();
+                    break;
+                case 'pagamentos':
+                    loadPagamentos();
+                    break;
+                case 'recibos':
+                    loadRecibos();
+                    break;
+            }
+            updateStats();
+        }
+        
+        // Carregar imóveis
+        function loadImoveis() {
+            const lista = document.getElementById('listaImoveis');
+            
+            if (db.imoveis.length === 0) {
+                lista.innerHTML = '<div class="empty-state">📦 Nenhum imóvel cadastrado</div>';
+                return;
+            }
+            
+            lista.innerHTML = db.imoveis.map(imovel => `
+                <div class="list-item">
+                    <h3>${imovel.codigo} - ${imovel.tipo}</h3>
+                    <p>📍 ${imovel.endereco}</p>
+                    <p>💵 R$ ${parseFloat(imovel.valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                    <span class="badge ${imovel.status === 'Disponível' ? 'badge-success' : 'badge-warning'}">${imovel.status}</span>
+                </div>
+            `).join('');
+        }
+        
+        // Carregar inquilinos
+        function loadInquilinos() {
+            const lista = document.getElementById('listaInquilinos');
+            
+            if (db.inquilinos.length === 0) {
+                lista.innerHTML = '<div class="empty-state">👤 Nenhum inquilino cadastrado</div>';
+                return;
+            }
+            
+            lista.innerHTML = db.inquilinos.map(inq => `
+                <div class="list-item">
+                    <h3>${inq.nome}</h3>
+                    <p>📱 ${inq.telefone}</p>
+                    <p>📧 ${inq.email}</p>
+                    <p>💼 ${inq.profissao}</p>
+                </div>
+            `).join('');
+        }
+        
+        // Carregar contratos
+        function loadContratos() {
+            const lista = document.getElementById('listaContratos');
+            
+            if (db.contratos.length === 0) {
+                lista.innerHTML = '<div class="empty-state">📄 Nenhum contrato ativo</div>';
+                return;
+            }
+            
+            lista.innerHTML = db.contratos.map(contrato => {
+                const imovel = db.imoveis.find(i => i.id == contrato.imovelId);
+                const inquilino = db.inquilinos.find(i => i.id == contrato.inquilinoId);
+                
+                return `
+                    <div class="list-item">
+                        <h3>🏠 ${imovel?.codigo || 'N/A'} - ${inquilino?.nome || 'N/A'}</h3>
+                        <p>📅 Início: ${contrato.dataInicio}</p>
+                        <p>💰 R$ ${parseFloat(contrato.valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês</p>
+                        <p>📆 Vencimento: Dia ${contrato.diaVencimento}</p>
+                        <span class="badge badge-info">Ativo</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Carregar pagamentos
+        function loadPagamentos() {
+            const lista = document.getElementById('listaPagamentos');
+            
+            if (db.pagamentos.length === 0) {
+                lista.innerHTML = '<div class="empty-state">💰 Nenhum pagamento registrado</div>';
+                return;
+            }
+            
+            lista.innerHTML = db.pagamentos.map(pag => {
+                const contrato = db.contratos.find(c => c.id == pag.contratoId);
+                const statusClass = pag.status === 'Pago' ? 'badge-success' : 
+                                   pag.status === 'Pendente' ? 'badge-warning' : 'badge-danger';
+                
+                return `
+                    <div class="list-item">
+                        <h3>Contrato #${pag.contratoId}</h3>
+                        <p>📅 Referência: ${pag.mesRef}</p>
+                        <p>💵 R$ ${parseFloat(pag.valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <p>📆 Vencimento: ${pag.vencimento}</p>
+                        <span class="badge ${statusClass}">${pag.status}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Carregar recibos
+        function loadRecibos() {
+            const select = document.getElementById('selectPagamentoRecibo');
+            const pagamentosPagos = db.pagamentos.filter(p => p.status === 'Pago');
+            
+            select.innerHTML = '<option value="">-- Selecione um pagamento --</option>' +
+                pagamentosPagos.map(p => {
+                    const contrato = db.contratos.find(c => c.id == p.contratoId);
+                    return `<option value="${p.id}">Pagamento #${p.id} - ${p.mesRef} - R$ ${parseFloat(p.valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</option>`;
+                }).join('');
+        }
+        
+        // Atualizar estatísticas
+        function updateStats() {
+            document.getElementById('totalImoveis').textContent = db.imoveis.length;
+            document.getElementById('totalInquilinos').textContent = db.inquilinos.length;
+            document.getElementById('totalContratos').textContent = db.contratos.length;
+            
+            const totalReceber = db.pagamentos
+                .filter(p => p.status !== 'Pago')
+                .reduce((sum, p) => sum + parseFloat(p.valorTotal || 0), 0);
+            
+            document.getElementById('totalReceber').textContent = 
+                'R$ ' + totalReceber.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        }
+        
+        // Modal
+        function openAddModal() {
+            const modal = document.getElementById('addModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            let formHTML = '';
+            
+            switch(currentTab) {
+                case 'imoveis':
+                    title.textContent = 'Cadastrar Imóvel';
+                    formHTML = `
+                        <div class="form-group">
+                            <label>Código:</label>
+                            <input type="text" id="inputCodigo" placeholder="Ex: AP101" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo:</label>
+                            <select id="inputTipo">
+                                <option>Casa</option>
+                                <option>Apartamento</option>
+                                <option>Kitnet</option>
+                                <option>Comercial</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Endereço:</label>
+                            <input type="text" id="inputEndereco" placeholder="Rua, Número" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor do Aluguel (R$):</label>
+                            <input type="number" id="inputValor" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select id="inputStatus">
+                                <option>Disponível</option>
+                                <option>Alugado</option>
+                                <option>Manutenção</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveImovel()">Salvar</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    `;
+                    break;
+                    
+                case 'inquilinos':
+                    title.textContent = 'Cadastrar Inquilino';
+                    formHTML = `
+                        <div class="form-group">
+                            <label>Nome Completo:</label>
+                            <input type="text" id="inputNome" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CPF:</label>
+                            <input type="text" id="inputCPF" placeholder="000.000.000-00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone:</label>
+                            <input type="tel" id="inputTelefone" placeholder="(00) 00000-0000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" id="inputEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Profissão:</label>
+                            <input type="text" id="inputProfissao">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveInquilino()">Salvar</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    `;
+                    break;
+                    
+                case 'contratos':
+                    title.textContent = 'Criar Contrato';
+                    formHTML = `
+                        <div class="form-group">
+                            <label>Imóvel:</label>
+                            <select id="inputImovel" required>
+                                <option value="">-- Selecione --</option>
+                                ${db.imoveis.filter(i => i.status === 'Disponível').map(i => 
+                                    `<option value="${i.id}">${i.codigo} - ${i.endereco}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Inquilino:</label>
+                            <select id="inputInquilino" required>
+                                <option value="">-- Selecione --</option>
+                                ${db.inquilinos.map(i => 
+                                    `<option value="${i.id}">${i.nome}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Início:</label>
+                            <input type="date" id="inputDataInicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dia do Vencimento:</label>
+                            <input type="number" id="inputDiaVenc" min="1" max="31" value="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor Mensal (R$):</label>
+                            <input type="number" id="inputValorContrato" step="0.01" required>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveContrato()">Salvar</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    `;
+                    break;
+                    
+                case 'pagamentos':
+                    title.textContent = 'Registrar Pagamento';
+                    formHTML = `
+                        <div class="form-group">
+                            <label>Contrato:</label>
+                            <select id="inputContratoPag" required>
+                                <option value="">-- Selecione --</option>
+                                ${db.contratos.map(c => {
+                                    const imovel = db.imoveis.find(i => i.id == c.imovelId);
+                                    return `<option value="${c.id}">Contrato #${c.id} - ${imovel?.codigo}</option>`;
+                                }).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mês/Ano:</label>
+                            <input type="month" id="inputMesRef" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor Total (R$):</label>
+                            <input type="number" id="inputValorPag" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Vencimento:</label>
+                            <input type="date" id="inputVencimento" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select id="inputStatusPag">
+                                <option>Pendente</option>
+                                <option>Pago</option>
+                                <option>Atrasado</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="savePagamento()">Salvar</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    `;
+                    break;
+            }
+            
+            body.innerHTML = formHTML;
+            modal.classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('addModal').classList.remove('active');
+        }
+        
+        // Salvar dados
+        function saveImovel() {
+            const imovel = {
+                codigo: document.getElementById('inputCodigo').value,
+                tipo: document.getElementById('inputTipo').value,
+                endereco: document.getElementById('inputEndereco').value,
+                valor: document.getElementById('inputValor').value,
+                status: document.getElementById('inputStatus').value
+            };
+            
+            db.addImovel(imovel);
+            closeModal();
+            showToast('Imóvel cadastrado com sucesso!');
+            loadContent();
+        }
+        
+        function saveInquilino() {
+            const inquilino = {
+                nome: document.getElementById('inputNome').value,
+                cpf: document.getElementById('inputCPF').value,
+                telefone: document.getElementById('inputTelefone').value,
+                email: document.getElementById('inputEmail').value,
+                profissao: document.getElementById('inputProfissao').value
+            };
+            
+            db.addInquilino(inquilino);
+            closeModal();
+            showToast('Inquilino cadastrado com sucesso!');
+            loadContent();
+        }
+        
+        function saveContrato() {
+            const contrato = {
+                imovelId: document.getElementById('inputImovel').value,
+                inquilinoId: document.getElementById('inputInquilino').value,
+                dataInicio: document.getElementById('inputDataInicio').value,
+                diaVencimento: document.getElementById('inputDiaVenc').value,
+                valor: document.getElementById('inputValorContrato').value
+            };
+            
+            db.addContrato(contrato);
+            closeModal();
+            showToast('Contrato criado com sucesso!');
+            loadContent();
+        }
+        
+        function savePagamento() {
+            const pagamento = {
+                contratoId: document.getElementById('inputContratoPag').value,
+                mesRef: document.getElementById('inputMesRef').value,
+                valorTotal: document.getElementById('inputValorPag').value,
+                vencimento: document.getElementById('inputVencimento').value,
+                status: document.getElementById('inputStatusPag').value
+            };
+            
+            db.addPagamento(pagamento);
+            closeModal();
+            showToast('Pagamento registrado com sucesso!');
+            loadContent();
+        }
+        
+        // Gerar recibo
+        function gerarRecibo() {
+            const pagamentoId = document.getElementById('selectPagamentoRecibo').value;
+            
+            if (!pagamentoId) {
+                showToast('Selecione um pagamento!');
+                return;
+            }
+            
+            const pagamento = db.pagamentos.find(p => p.id == pagamentoId);
+            const contrato = db.contratos.find(c => c.id == pagamento.contratoId);
+            const imovel = db.imoveis.find(i => i.id == contrato.imovelId);
+            const inquilino = db.inquilinos.find(i => i.id == contrato.inquilinoId);
+            
+            const reciboHTML = `
+                <div class="recibo-preview">
+                    <div class="recibo-header">
+                        <h2>🧾 RECIBO DE ALUGUEL</h2>
+                        <p>Recibo #${pagamento.id}</p>
+                    </div>
+                    <div class="recibo-row">
+                        <strong>Mês Referência:</strong>
+                        <span>${pagamento.mesRef}</span>
+                    </div>
+                    <div class="recibo-row">
+                        <strong>Imóvel:</strong>
+                        <span>${imovel.endereco}</span>
+                    </div>
+                    <div class="recibo-row">
+                        <strong>Inquilino:</strong>
+                        <span>${inquilino.nome}</span>
+                    </div>
+                    <div class="recibo-row">
+                        <strong>CPF:</strong>
+                        <span>${inquilino.cpf}</span>
+                    </div>
+                    <div class="recibo-row">
+                        <strong>Valor do Aluguel:</strong>
+                        <span>R$ ${parseFloat(pagamento.valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>
+                    <div class="recibo-total">
+                        <h3>VALOR TOTAL PAGO</h3>
+                        <div class="valor">R$ ${parseFloat(pagamento.valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                    </div>
+                    <button class="btn btn-success" onclick="compartilharRecibo(${pagamento.id})">📤 Compartilhar Recibo</button>
+                </div>
+            `;
+            
+            document.getElementById('reciboPreview').innerHTML = reciboHTML;
+            showToast('Recibo gerado com sucesso!');
+        }
+        
+        // Compartilhar recibo
+        function compartilharRecibo(pagamentoId) {
+            const pagamento = db.pagamentos.find(p => p.id == pagamentoId);
+            const contrato = db.contratos.find(c => c.id == pagamento.contratoId);
+            const imovel = db.imoveis.find(i => i.id == contrato.imovelId);
+            const inquilino = db.inquilinos.find(i => i.id == contrato.inquilinoId);
+            
+            const texto = `
+🧾 RECIBO DE ALUGUEL #${pagamento.id}
+
+📅 Mês: ${pagamento.mesRef}
+🏠 Imóvel: ${imovel.endereco}
+👤 Inquilino: ${inquilino.nome}
+💰 Valor: R$ ${parseFloat(pagamento.valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+
+✅ Pagamento confirmado
+            `.trim();
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Recibo de Aluguel',
+                    text: texto
+                }).then(() => {
+                    showToast('Recibo compartilhado!');
+                }).catch(err => {
+                    console.log('Erro ao compartilhar:', err);
+                });
+            } else {
+                // Fallback: copiar para clipboard
+                navigator.clipboard.writeText(texto).then(() => {
+                    showToast('Recibo copiado para a área de transferência!');
+                });
+            }
+        }
+        
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+        
+        // Install prompt
+        function hideInstallPrompt() {
+            document.getElementById('installPrompt').classList.remove('show');
+            localStorage.setItem('installPromptHidden', 'true');
+        }
+        
+        // PWA - Detectar instalação
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            if (!localStorage.getItem('installPromptHidden')) {
+                document.getElementById('installPrompt').classList.add('show');
+            }
+        });
+        
+        // Inicializar
+        window.addEventListener('load', () => {
+            loadContent();
+            
+            // Mostrar prompt de instalação
+            if (!localStorage.getItem('installPromptHidden') && !window.matchMedia('(display-mode: standalone)').matches) {
+                setTimeout(() => {
+                    document.getElementById('installPrompt').classList.add('show');
+                }, 2000);
+            }
+        });
+        
+        // Prevenir zoom no iOS
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
