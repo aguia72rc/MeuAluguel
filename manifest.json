@@ -1,0 +1,34 @@
+{
+  "name": "Gestão de Imóveis Mobile",
+  "short_name": "Imóveis",
+  "description": "Sistema completo de gestão de imóveis e aluguéis para proprietários",
+  "start_url": "./gestao_imoveis_mobile.html",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23667eea' width='100' height='100'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white'%3E🏠%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23667eea' width='100' height='100'/%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='white'%3E🏠%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800'%3E%3Crect fill='%23667eea' width='400' height='800'/%3E%3Ctext x='200' y='400' font-size='50' text-anchor='middle' fill='white'%3EGestão Imóveis%3C/text%3E%3C/svg%3E",
+      "sizes": "400x800",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["business", "finance", "productivity"],
+  "lang": "pt-BR"
+}
